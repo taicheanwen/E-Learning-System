@@ -1,0 +1,80 @@
+﻿@model Assg.Models.StudentModels.UserAccount
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<h1>Edit Profile</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <label class="upload">
+                <input type="file" name="photo" accept="image/jpeg,image/png,image/jpg" hidden>
+                @{
+                    var profileImagePath = User.FindFirst("ProfileImage")?.Value;
+                    var imagePath = System.IO.Path.Combine("wwwroot/userProfile", profileImagePath ?? "");
+                }
+                @if (Model.Profile != null && !string.IsNullOrEmpty(profileImagePath) && System.IO.File.Exists(imagePath))
+                {
+                    <img src="@Url.Content($"~/userProfile/{Model.Profile}")" alt="Profile Image" class="profile-image" style="width: 200px; height: 250px; object-fit: cover;">
+                }
+                else
+                {
+                    <img src="@Url.Content("~/images/default-profile-image.png")" alt="Default Profile Image" class="profile-image" style="width: 200px; height: 250px; object-fit: cover;">
+                }
+            </label>
+            @Html.ValidationMessage("photo")
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Username" class="control-label">Username</label>
+                <input asp-for="Username" class="form-control" readonly/>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save Changes" class="btn btn-primary" />
+            </div>
+        </form>
+
+        <form asp-action="DeleteAccount" method="post">
+            <div class="form-group mt-3">
+                <input type="submit" value="Delete Account" class="btn btn-danger"
+                       onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

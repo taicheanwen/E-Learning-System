@@ -1,0 +1,141 @@
+﻿@model IEnumerable<Assg.Models.StudentModels.Course>
+
+@{
+    ViewData["Title"] = "Course Management";
+}
+
+<div class="container mt-5">
+    <h2>Course Management</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Course ID</th>
+                <th>Course Name</th>
+                <th>Price</th>
+                <th>Category ID</th>
+                <th>Category Name</th>
+                <th>Subtitle</th>
+                <th>Description</th>
+                <th>Participants</th>
+                <th>Created Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in Model)
+            {
+                <tr>
+                    <td>@course.Id</td>
+                    <td>@course.Name</td>
+                    <td>@course.Price.ToString("C")</td>
+                    <td>@course.Category?.CategoryId</td>
+                    <td>@course.Category?.CategoryName</td>
+                    <td>@course.subtitle</td>
+                    <td>@course.description</td>
+                    <td>@course.Participant</td>
+                    <td>@course.createdDate?.ToShortDateString()</td>
+                    <td>
+                        <!-- chapter content button -->
+                        <a href="@Url.Action("ChapterContent", "ChapterContent", new { courseId = course.Id, chapterId = (course.Chapters?.FirstOrDefault()?.Id ?? 0) })" class="btn btn-info">
+                            Details
+                        </a>
+
+                        <!-- edit button -->
+                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editCourseModal"
+                                onclick="setEditValues('@course.Id', '@course.Name', @course.Price, '@course.Category?.CategoryId', '@course.subtitle', '@course.description')">
+                            Edit
+                        </button>
+
+
+                        <!-- delete button -->
+                        <form method="post" asp-action="DeleteCourse" style="display:inline;" onsubmit="return confirmDeleteCourse(this);">
+                            <input type="hidden" name="id" value="@course.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Edit Course Modal -->
+<div class="modal fade" id="editCourseModal" tabindex="-1" aria-labelledby="editCourseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCourseModalLabel">Edit Course</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="EditCourse" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="EditCourseId" name="Id">
+                    <div class="mb-3">
+                        <label for="EditCourseName" class="form-label">Course Name:</label>
+                        <input type="text" class="form-control" id="EditCourseName" name="Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="EditCoursePrice" class="form-label">Price:</label>
+                        <input type="number" class="form-control" id="EditCoursePrice" name="Price" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="CategoryId" class="form-label">Category ID:</label>
+                        <input type="text" class="form-control" id="CategoryId" name="categoryId" required>
+                        @if (TempData["EditErrorMessage"] != null && TempData["EditCourseId"]?.ToString() == ViewData["EditCourseId"]?.ToString())
+                        {
+                            <div class="text-danger mt-2">@TempData["EditErrorMessage"]</div>
+                        }
+                    </div>
+                    <div class="mb-3">
+                        <label for="EditCourseSubtitle" class="form-label">Subtitle:</label>
+                        <input type="text" class="form-control" id="EditCourseSubtitle" name="Subtitle">
+                    </div>
+                    <div class="mb-3">
+                        <label for="EditCourseDescription" class="form-label">Description:</label>
+                        <textarea class="form-control" id="EditCourseDescription" name="Description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function setEditValues(id, name, price, categoryId, subtitle, description) {
+        document.getElementById('EditCourseId').value = id;
+        document.getElementById('EditCourseName').value = name;
+        document.getElementById('EditCoursePrice').value = price;
+        document.getElementById('CategoryId').value = categoryId;
+        document.getElementById('EditCourseSubtitle').value = subtitle;
+        document.getElementById('EditCourseDescription').value = description;
+    }
+
+    function confirmDeleteCourse(form) {
+        const confirmed = confirm('Are you sure you want to delete this course? This action cannot be undone.');
+        if (confirmed) {
+            return true; // Proceed with form submission
+        }
+        return false; // Cancel form submission
+    }
+</script>

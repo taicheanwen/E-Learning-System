@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Assg.Models.StudentModels.Payment>
+
+<h1>Your Purchased Videos</h1>
+
+@if (!Model.Any())
+{
+    <p>You have not purchased any videos yet.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var payment in Model)
+        {
+            var course = payment.ChapterContent;
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@course.Title</h5>
+                        <a href="@Url.Content("~/" + course.FileType)" class="btn btn-primary">Watch Video</a>
+                        <a href="@Url.Action("Answer", "Quiz", new { chapterContentId = course.Id })" class="btn btn-primary">
+                            Take Quiz
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

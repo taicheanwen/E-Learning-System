@@ -1,0 +1,8 @@
+﻿@{
+    Layout = "_Layout";
+
+    if (Context.Request.Path.Value?.Contains("/Admin", StringComparison.OrdinalIgnoreCase) == true)
+    {
+        Layout = "_AdminLayout";
+    }
+}

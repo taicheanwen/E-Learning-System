@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Assg.Models.StudentModels.Category>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="navigation-container">
+    <div class="category-scroll">
+        @foreach (var category in Model)
+        {
+            <div class="category-pill">
+                <form method="get" action="/Category/GetSubcategories">
+                    <input type="hidden" name="categoryId" value="@category.CategoryId" />
+                    <button type="submit">
+                        <span class="category-name">@category.CategoryName</span>
+                    </button>
+                </form>
+            </div>
+        }
+    </div>
+</div>
+
+@if (ViewBag.Subcategories != null)
+{
+    <div class="subcategory-container">
+        @foreach (var subcategory in ViewBag.Subcategories)
+        {
+            <form method="get" action="/ChapterContent/ChapterContent" class="subcategory-form">
+                <input type="hidden" name="subcategoryId" value="@subcategory.Id" />
+                <button type="submit" class="subcategory-button">@subcategory.Name</button>
+            </form>
+        }
+    </div>
+}
+</br>
+<h3>Top 3 popular vidoes</h3>
+@if (ViewBag.PopularVideos != null)
+{
+    <div class="video-container">
+        @foreach (var video in ViewBag.PopularVideos)
+        {
+            <div class="video-card">
+                <h3>@video.CourseName</h3>
+                <p>Purchase Count: @video.PurchaseCount</p>
+                <video id="video-@video.CourseId" width="100%" preload="metadata" autoplay muted loop>
+                    <source src="/@video.CourseVideo" type="video/mp4" />
+                </video>
+                <form method="get" action="/ChapterContent/ViewCourse">
+                    <input type="hidden" name="courseId" value="@video.CourseId" />
+                    <button type="submit" class="btn btn-primary">View Course</button>
+                </form>
+            </div>
+        }
+    </div>
+}
+
+
+
+

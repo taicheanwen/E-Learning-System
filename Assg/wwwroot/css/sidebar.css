@@ -1,0 +1,42 @@
+/* Sidebar styles */
+.sidebar {
+    height: 100vh;
+    width: 0; /* Initially collapsed */
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #343a40;
+    color: white;
+    padding-top: 20px;
+    transition: width 0.3s; /* Smooth transition for the width change */
+    z-index: 1000;
+}
+
+    /* When the sidebar is open */
+    .sidebar.open {
+        width: 250px; /* Full width */
+    }
+
+    /* Sidebar links */
+    .sidebar a {
+        text-decoration: none;
+        color: white;
+        display: block;
+        padding: 10px 20px;
+    }
+
+        .sidebar a:hover {
+            background-color: #495057;
+            text-decoration: none;
+        }
+
+/* Content area */
+.main-content {
+    margin-left: 0; /* Start with no margin since sidebar is collapsed */
+    padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+    .main-content.expanded {
+        margin-left: 250px; /* Push content when the sidebar is expanded */
+    }

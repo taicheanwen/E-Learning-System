@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Find Us Here";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Find Us Here</h2>
+
+    <div id="map" style="height: 400px; width: 100%; border-radius: 8px; border: 1px solid #ccc;"></div>
+
+    <div class="contact-info mt-4">
+        <h3 class="text-center">Contact Information</h3>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>Phone:</strong>
+                        <a href="tel:+60341450123" style="text-decoration: none; color: #007bff;">+60341450123</a>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Email:</strong>
+                        <a href="mailto: info@tarc.edu.my?subject=Inquiry" style="text-decoration: none; color: #007bff;"> info@tarc.edu.my</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        var map = L.map('map').setView([3.2159723, 101.7232945], 16);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            minZoom: 3,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker([3.2159723, 101.7232945]).addTo(map)
+            .bindPopup('TARUMT - Tunku Abdul Rahman University of Management and Technology')
+            .openPopup();
+
+        map.on('click', function (event) {
+            var marker = L.marker(event.latlng).addTo(map);
+            marker.bindPopup('Marker').openPopup();
+        });
+    </script>
+}

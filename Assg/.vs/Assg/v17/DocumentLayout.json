@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\USER\\source\\repos\\Assg\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5C32BB93-8F82-4DFC-AA7E-309BBE6B601C}|Assg.csproj|c:\\users\\user\\source\\repos\\assg\\views\\studentviews\\account\\homepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5C32BB93-8F82-4DFC-AA7E-309BBE6B601C}|Assg.csproj|solutionrelative:views\\studentviews\\account\\homepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Homepage.cshtml",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\Assg\\Views\\StudentViews\\Account\\Homepage.cshtml",
+              "RelativeDocumentMoniker": "Views\\StudentViews\\Account\\Homepage.cshtml",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\Assg\\Views\\StudentViews\\Account\\Homepage.cshtml",
+              "RelativeToolTip": "Views\\StudentViews\\Account\\Homepage.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-12-29T17:55:15.555Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

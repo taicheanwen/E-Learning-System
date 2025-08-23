@@ -1,0 +1,55 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Chapter Content Management";
+}
+
+<div class="container mt-5">
+    <h2>Chapter Content Management</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <div class="mb-4">
+        <p><strong>Course ID:</strong> @ViewBag.CourseId</p>
+        <p><strong>Course Name:</strong> @ViewBag.CourseName</p>
+        <p><strong>Chapter ID:</strong> @ViewBag.ChapterId</p>
+        <p><strong>Chapter Name:</strong> @ViewBag.ChapterName</p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No chapter contents available for this chapter.</div>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Total Review Count</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var content in Model)
+                {
+                    <tr>
+                        <td>@content.Id</td>
+                        <td>@content.Title</td>
+                        <td>@content.Description</td>
+                        <td>@content.TotalReviewCount</td>
+                        <td>
+                            <!-- reviews button -->
+                            <a href="@Url.Action("ReviewManagement", "Review", new { chapterContentId = content.Id })" class="btn btn-info">Reviews</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

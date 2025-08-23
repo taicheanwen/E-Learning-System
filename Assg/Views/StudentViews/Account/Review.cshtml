@@ -1,0 +1,109 @@
+﻿<head>
+    <style>
+        .rating {
+            display: flex;
+            direction: rtl;
+            justify-content: center;
+        }
+
+            .rating input {
+                display: none;
+            }
+
+            .rating label {
+                font-size: 2rem;
+                color: #ccc;
+                cursor: pointer;
+                margin: 0 5px;
+            }
+
+            .rating input:checked ~ label,
+            .rating input:hover ~ label {
+                color: gold;
+            }
+
+            .rating label:hover,
+            .rating label:hover ~ label {
+                color: gold;
+            }
+                .rating input:checked ~ label,
+                .rating label:hover ~ label {
+                    color: gold;
+                }
+
+        .review-container {
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-top: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        .btn-submit {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .btn-submit:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<body>
+    <div class="review-container">
+        <h1>Rate and Review</h1>
+        <p>Please rate your experience for the course: <strong>@ViewBag.CourseName</strong></p>
+
+        <form asp-action="Review" method="post">
+            <input type="hidden" name="CourseId" value="@ViewBag.CourseId" />
+            <input type="hidden" name="PaymentId" value="@ViewBag.PaymentId" />
+            <input type="hidden" name="UserId" value="@ViewBag.UserId" />
+
+            <div class="rating">
+                <input type="radio" id="star5" name="ReviewRate" value="5" />
+                <label for="star5" title="5 stars">★</label>
+                <input type="radio" id="star4" name="ReviewRate" value="4" />
+                <label for="star4" title="4 stars">★</label>
+                <input type="radio" id="star3" name="ReviewRate" value="3" />
+                <label for="star3" title="3 stars">★</label>
+                <input type="radio" id="star2" name="ReviewRate" value="2" />
+                <label for="star2" title="2 stars">★</label>
+                <input type="radio" id="star1" name="ReviewRate" value="1" />
+                <label for="star1" title="1 star">★</label>
+            </div>
+
+            <textarea name="ReviewText" placeholder="Write your review here..." required></textarea>
+
+            <button type="submit" class="btn-submit">Submit Review</button>
+        </form>
+    </div>
+</body>

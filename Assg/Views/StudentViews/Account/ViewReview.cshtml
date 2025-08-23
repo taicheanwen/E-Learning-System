@@ -1,0 +1,228 @@
+﻿@model IEnumerable<dynamic>
+
+@if (ViewData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @ViewData["SuccessMessage"]
+    </div>
+}
+@if (ViewData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @ViewData["ErrorMessage"]
+    </div>
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Course Reviews</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Optional: For icons -->
+    <style>
+        /* Styles for the review table */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+
+            table th, table td {
+                padding: 12px;
+                text-align: left;
+            }
+
+            table th {
+                background-color: #3f51b5;
+                color: white;
+                font-size: 1rem;
+            }
+
+            table td {
+                background-color: #f9f9f9;
+                color: #555;
+                font-size: 0.95rem;
+            }
+
+            table tr:nth-child(even) td {
+                background-color: #f1f1f1;
+            }
+
+            table tr:hover {
+                background-color: #e0e0e0;
+            }
+
+        .review-date {
+            font-style: italic;
+            color: #999;
+        }
+
+        .rating {
+            font-weight: bold;
+            color: #f39c12;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            background-color: #3f51b5;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
+            text-align: center;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+            .btn:hover {
+                background-color: #5c6bc0;
+            }
+
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+
+            .btn-danger:hover {
+                background-color: #c0392b;
+            }
+
+        /* Hidden container for editing review */
+        .edit-container {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+            .edit-container input,
+            .edit-container textarea {
+                width: 100%;
+                padding: 8px;
+                margin: 5px 0;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+
+            .edit-container button {
+                padding: 10px 15px;
+                background-color: #3f51b5;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+                .edit-container button:hover {
+                    background-color: #5c6bc0;
+                }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Your Course Reviews</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Course Name</th>
+                    <th>Review Date</th>
+                    <th>Rating</th>
+                    <th>Review Text</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var review in Model)
+                {
+                    <tr id="review-row-@review.ReviewId">
+                        <td>@review.CourseName</td>
+                        <td class="review-date">@review.ReviewDate.ToShortDateString()</td>
+                        <td class="rating">@review.ReviewRate</td>
+                        <td>@review.ReviewText</td>
+                        <td>
+                            <button class="btn" onclick="toggleEdit(@review.ReviewId)">Edit</button>
+                            <br>
+                            <br>
+                            <form method="post" action="@Url.Action("DeleteReview", "Payment")" style="display:inline;">
+                                <input type="hidden" name="reviewId" value="@review.ReviewId" />
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    <tr class="edit-container" id="edit-container-@review.ReviewId">
+                        <td colspan="6">
+                            <form method="post" action="@Url.Action("EditReview", "Payment")">
+                                <input type="hidden" name="ReviewId" value="@review.ReviewId" />
+                                <div>
+                                    <label for="ReviewRate-@review.ReviewId">Rating:</label>
+                                    <div class="star-rating" data-review-id="@review.ReviewId">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <span class="star @((i <= review.ReviewRate) ? "selected" : "")" data-value="@i">&#9733;</span>
+                                        }
+                                    </div>
+                                    <input type="hidden" id="ReviewRate-@review.ReviewId" name="ReviewRate" value="@review.ReviewRate" />
+                                </div>
+                                <div>
+                                    <label for="ReviewText-@review.ReviewId">Review Text:</label>
+                                    <textarea id="ReviewText-@review.ReviewId" name="ReviewText" required>@review.ReviewText</textarea>
+                                </div>
+                                <div>
+                                    <button type="submit">Save Changes</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function toggleEdit(reviewId) {
+            var editContainer = document.getElementById("edit-container-" + reviewId);
+            var reviewRow = document.getElementById("review-row-" + reviewId);
+
+            // Toggle visibility of edit container
+            if (editContainer.style.display === "none" || editContainer.style.display === "") {
+                editContainer.style.display = "table-row";
+                reviewRow.style.display = "none"; // Hide the review row
+            } else {
+                editContainer.style.display = "none";
+                reviewRow.style.display = "table-row"; // Show the review row again
+            }
+        }
+    </script>
+
+</body>
+</html>

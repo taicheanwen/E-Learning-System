@@ -1,0 +1,42 @@
+﻿@{
+    var userScore = ViewBag.UserScore;
+    var userAnswers = ViewBag.UserAnswers as List<(string Question, string UserAnswer, string CorrectAnswer, bool IsCorrect)>;
+}
+
+<h2>Quiz Results</h2>
+
+<p><strong>Your Score:</strong> @userScore</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Question</th>
+            <th>Your Answer</th>
+            <th>Correct Answer</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (userAnswers != null)
+        {
+            foreach (var answer in userAnswers)
+            {
+                <tr>
+                    <td>@answer.Question</td>
+                    <td>@answer.UserAnswer</td>
+                    <td>@answer.CorrectAnswer</td>
+                    <td>
+                        @if (answer.IsCorrect)
+                        {
+                            <span class="text-success">Correct</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Wrong</span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

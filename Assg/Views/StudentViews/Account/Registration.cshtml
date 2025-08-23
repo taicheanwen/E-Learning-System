@@ -1,0 +1,95 @@
+﻿@model Assg.Models.StudentModels.StudentRegister
+
+@{
+    ViewData["Title"] = "Registration";
+}
+
+<h1>Registration</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Registration">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if(ViewBag.Message != null){
+                <div class="form-group" style="color:green;">@ViewBag.Message</div>
+            }
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <div class="input-group">
+                    <input asp-for="Password" class="form-control" type="password" id="PasswordField" />
+                    <span class="input-group-text">
+                        <i class="bi bi-eye toggle-password" data-target="PasswordField"></i>
+                    </span>
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <div class="input-group">
+                    <input asp-for="ConfirmPassword" class="form-control" type="password" id="ConfirmPasswordField" />
+                    <span class="input-group-text">
+                        <i class="bi bi-eye toggle-password" data-target="ConfirmPasswordField"></i>
+                    </span>
+                </div>
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Role" class="control-label">Select Role</label>
+                <div class="input-group">
+                    <div class="form-check">
+                        <input asp-for="Role" class="form-check-input" type="radio" id="Student" value="Student" />
+                        <label class="form-check-label" for="StudentRole">Student</label>
+                    </div>
+                    <div class="form-check">
+                        <input asp-for="Role" class="form-check-input" type="radio" id="Tutor" value="Tutor" />
+                        <label class="form-check-label" for="TutorRole">Tutor</label>
+                    </div>
+                </div>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    Already have an account ? <a asp-action="Login">Go To Login</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.toggle-password').forEach(icon => {
+                icon.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-target');
+                    const passwordField = document.getElementById(targetId);
+                    if (passwordField) {
+                        const isPassword = passwordField.getAttribute('type') === 'password';
+                        passwordField.setAttribute('type', isPassword ? 'text' : 'password');
+                        this.classList.toggle('bi-eye');
+                        this.classList.toggle('bi-eye-slash');
+                    }
+                });
+            });
+        });
+    </script>
+}

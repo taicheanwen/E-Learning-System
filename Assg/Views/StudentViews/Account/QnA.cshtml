@@ -1,0 +1,57 @@
+﻿@model Assg.Models.StudentModels.ChatQuestion
+
+@{
+    ViewData["Title"] = "QnA";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+<form asp-action="QnA" asp-controller="ChapterContent" method="post">
+<div class="form-group">
+    <select id="chapterContentId" name="chapterContentId" class="form-control" required>
+        <option value="">--Select a Chapter Content--</option>
+        @foreach (var chapterContentId in ViewData["GetCourseId"] as SelectList)
+        {
+            <option value="@chapterContentId.Value">@chapterContentId.Text</option>
+        }
+    </select>
+</div>
+<br />
+    <div class="form-group">
+        <label for="Title">Title:</label>
+        <input type="text" id="Title" name="title" class="form-control" required />
+    </div>
+    <br/>
+    <div class="form-group">
+        <label for="Content">Content:</label>
+        <textarea id="Content" name="content" class="form-control" rows="5" placeholder="Write your question here..." required></textarea>
+    </div>
+    <br />
+    
+    <button type="submit" class="btn btn-primary">Submit Question</button>
+</form>
+<br />
+<h3>Your Questions</h3>
+<ul class="question-list">
+    @foreach (var question in ViewData["Questions"] as IEnumerable<dynamic>)
+    {
+        <li class="question-box">
+            <div class="question-title"><strong>Title:</strong> @question.QuestionTitle</div>
+            <div class="question-content"><strong>Content:</strong> @question.QuestionContent</div>
+            <div class="question-created-at"><strong>Created at:</strong> @question.CreatedAt</div>
+            <div class="question-tutor-reply"><strong>Reply:</strong> @question.replies</div>
+            <form asp-action="DeleteQnA" asp-controller="ChapterContent" method="post">
+                <input type="hidden" name="questionId" value="@question.Id" />
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+        </li>
+    }
+</ul>
+
+

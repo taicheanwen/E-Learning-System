@@ -1,0 +1,107 @@
+﻿@using System.Globalization
+@model IEnumerable<Assg.Models.StudentModels.Payment>
+
+<head>
+    <style>
+        .table th a {
+            display: inline-block;
+            text-decoration: none;
+            color:black;
+        }
+
+            .table th a.asc::after {
+                content: ' ▴';
+            }
+
+            .table th a.des::after {
+                content: ' ▾';
+            }
+
+    </style>
+</head>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+@{
+    ViewData["Title"] = "Transaction History";
+    var fields = new[] { "Payment Date", "Title", "Payment Amount", "Payment Status" };
+}
+
+<h1>Transaction History</h1>
+<br/>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">No transaction history available.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                @foreach (var f in fields)
+                {
+                    string d = "asc";
+                    string c = "";
+
+                    if (f == ViewBag.Sort)
+                    {
+                        d = ViewBag.Dir == "des" ? "asc" : "des";
+                        c = ViewBag.Dir;
+                    }
+
+                    <th>
+                        <a href="?sort=@f&dir=@d" class="@c">@f</a>
+                    </th>
+                }
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var payment in Model)
+            {
+                <tr>
+                    <td>@payment.PaymentDate.ToString("yyyy-MM-dd")</td>
+                    <td>@payment.ChapterContent.Title</td>
+                    <td>@payment.PaymentAmount.ToString("C", new CultureInfo("ms-MY"))</td>
+                    <td>
+                        @if (payment.PaymentStatus == "Success")
+                        {
+                            <span class="badge bg-success">Paid</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@payment.PaymentStatus</span>
+                        }
+                    </td>
+
+                    <td>
+                        @if (ViewBag.CheckReview != null && ((List<int>)ViewBag.CheckReview).Contains(payment.PaymentId))
+                        {
+                            <button class="btn btn-secondary" disabled>Already Reviewed</button>
+                        }
+                        else
+                        {
+                            <a asp-action="Review" asp-route-paymentId="@payment.PaymentId" class="btn btn-primary review-btn">Review</a>
+                        }
+                    </td>
+
+                    <td>
+                        <form method="post" asp-controller="Payment" asp-action="Ereceipt" asp-route-paymentId="@payment.PaymentId">
+                            <input type="hidden" name="paymentId" value="@payment.PaymentId" />
+                            <input type="hidden" name="userId" value="@payment.UserId" />
+                            <button type="submit" class="btn btn-info">Download receipt</button>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}

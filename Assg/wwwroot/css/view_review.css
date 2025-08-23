@@ -1,0 +1,20 @@
+.star-rating {
+    display: inline-block;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #ddd;
+}
+
+.star {
+    color: #ddd; /* Default color for unselected stars */
+    padding: 5px;
+}
+
+    .star.selected {
+        color: #f39c12; /* Color for selected stars */
+    }
+
+    .star:hover,
+    .star:hover ~ .star {
+        color: #f39c12; /* Hover color for stars */
+    }

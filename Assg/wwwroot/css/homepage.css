@@ -1,0 +1,145 @@
+
+.navigation-container {
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 0;
+    background-color: #fff;
+}
+
+.category-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 0 20px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+    .category-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+.category-pill {
+    flex-shrink: 0;
+}
+
+    .category-pill button {
+        background-color: #f5f5f5;
+        border: none;
+        border-radius: 25px;
+        padding: 12px 24px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        font-size: 15px;
+        color: #333;
+        min-width: 100px;
+    }
+
+        .category-pill button:hover {
+            background-color: #e8e8e8;
+        }
+
+.category-name {
+    font-weight: 500;
+}
+
+.subcategory-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px;
+}
+
+.subcategory-form {
+    margin: 0;
+}
+
+.subcategory-button {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    color: #333;
+}
+
+    .subcategory-button:hover {
+        background-color: #f5f5f5;
+        border-color: #bbb;
+    }
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+/* Container to hold video cards */
+.video-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between cards */
+    justify-content: space-between;
+}
+
+/* Card styling for each video */
+.video-card {
+    width: 30%; /* Adjust based on how many cards you want per row */
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+    /* Hover effect for the video cards */
+    .video-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Styling for the video */
+    .video-card video {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+
+    /* Styling for the title and button */
+    .video-card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 10px;
+    }
+
+    .video-card p {
+        font-size: 1rem;
+        margin-bottom: 15px;
+    }
+
+    .video-card button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .video-card button:hover {
+            background-color: #0056b3;
+        }

@@ -1,0 +1,130 @@
+﻿@{
+    ViewData["Title"] = "Report Management";
+}
+
+<h1>Report Management</h1>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function loadReport(sortField, sortOrder) {
+        $.get('/Admin/ReportManagement', { sortField: sortField, sortOrder: sortOrder }, function(data) {
+            $('body').html(data);
+        });
+    }
+</script>
+
+@{
+    var fields = new[] { "Id", "Name", "Email", "Username" };
+}
+
+<h2>Total Enrolled Students</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            @foreach (var field in fields)
+            {
+                string direction = "asc";
+                string currentClass = "";
+
+                if (field == ViewBag.Sort)
+                {
+                    direction = ViewBag.Dir == "des" ? "asc" : "des";
+                    currentClass = ViewBag.Dir;
+                }
+
+                <th>
+                    <a href="?sort=@field&dir=@direction" class="@currentClass">@field</a>
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.Students != null)
+        {
+            foreach (var student in ViewBag.Students)
+            {
+                <tr>
+                    <td>@student.Id</td>
+                    <td>@student.Name</td>
+                    <td>@student.Email</td>
+                    <td>@student.Username</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+<h2>Total Enrolled Tutors</h2>
+@{
+    var tutorFields = new[] { "Id", "Name", "Email", "Username" };
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            @foreach (var f in tutorFields)
+            {
+                string direction = "asc";
+                string currentClass = "";
+
+                if (f == ViewBag.Sort)
+                {
+                    direction = ViewBag.Dir == "des" ? "asc" : "des";
+                    currentClass = ViewBag.Dir;
+                }
+
+                <th>
+                    <a href="?sort=@f&dir=@direction" class="@currentClass">@f</a>
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tutor in ViewBag.Tutors)
+        {
+            <tr>
+                <td>@tutor.Id</td>
+                <td>@tutor.Name</td>
+                <td>@tutor.Email</td>
+                <td>@tutor.Username</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>The Most Popular Courses</h2>
+@{
+    var courseFields = new[] { "Id", "Name", "Price"/* , "CategoryId" */, "Participant" };
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            @foreach (var f in courseFields)
+            {
+                string direction = "asc";
+                string currentClass = "";
+
+                if (f == ViewBag.Sort)
+                {
+                    direction = ViewBag.Dir == "des" ? "asc" : "des";
+                    currentClass = ViewBag.Dir;
+                }
+
+                <th>
+                    <a href="?sort=@f&dir=@direction" class="@currentClass">@f</a>
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in ViewBag.PopularCourses)
+        {
+            <tr>
+                <td>@course.Id</td>
+                <td>@course.Name</td>
+                <td>@course.Price</td>
+                <td>@course.Participant</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,73 @@
+﻿@model Assg.Models.StudentModels.Payment
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="container">
+    <h2 class="page-title">Payment Information</h2>
+
+    <form asp-action="Checkout" asp-controller="Payment" method="post">
+        <div class="form-group">
+            <label asp-for="CardNo" class="control-label">Card Number</label>
+            <input asp-for="CardNo" class="form-control" />
+            <span asp-validation-for="CardNo" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CardExpiredDate" class="control-label">Expiry Date (YYYY-MM)</label>
+            <input asp-for="CardExpiredDate" type="month" class="form-control" />
+            <span asp-validation-for="CardExpiredDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CVV" class="control-label">CVV</label>
+            <input asp-for="CVV" type="number" maxlength="3" class="form-control" />
+            <span asp-validation-for="CVV" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CardHolderName" class="control-label">Card Holder Name</label>
+            <input asp-for="CardHolderName" class="form-control" />
+            <span asp-validation-for="CardHolderName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="PaymentAmount">Amount</label>
+            <input type="number" class="form-control" id="PaymentAmount" name="PaymentAmount" value="@ViewData["Subtotal"]" readonly />
+        </div>
+
+        <div class="form-group">
+            <input type="hidden" id="CartIds" name="CardId" value="@ViewData["CartId"]" />
+        </div>
+
+        <div class="form-group">
+            <input type="hidden" id="PaymentDate" name="PaymentDate" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")" />
+        </div>
+
+        <div class="form-group">
+            <input type="hidden" id="PaymentStatus" name="PaymentStatus" value="Success" />
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Pay Now" class="btn btn-primary" />
+        </div>
+    </form>
+
+    <div class="back-link">
+        <a href="@Url.Action("Cart", "ChapterContent")">Back to Cart</a>
+    </div>
+</div>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.6.0.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>

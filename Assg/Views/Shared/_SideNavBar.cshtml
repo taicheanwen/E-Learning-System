@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        /* Sidebar styles */
+        .sidebar {
+            height: 100vh;
+            width: 0; /* Initially collapsed */
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            color: white;
+            padding-top: 20px;
+            transition: width 0.3s; /* Smooth transition for the width change */
+            z-index: 1000;
+        }
+
+            /* When the sidebar is open */
+            .sidebar.open {
+                width: 250px; /* Full width */
+            }
+
+            /* Hide sidebar content when collapsed */
+            .sidebar a {
+                visibility: hidden; /* Ensure it's hidden but still takes up space */
+            }
+
+            /* Show the sidebar content when it's open */
+            .sidebar.open a {
+                visibility: visible; /* Make it visible when the sidebar is open */
+            }
+
+            /* Sidebar links */
+            .sidebar a {
+                text-decoration: none;
+                color: white;
+                display: block;
+                padding: 10px 20px;
+            }
+
+                .sidebar a:hover {
+                    background-color: #495057;
+                    text-decoration: none;
+                }
+
+        /* Content area */
+        .main-content {
+            margin-left: 0; /* Start with no margin since sidebar is collapsed */
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+            .main-content.expanded {
+                margin-left: 250px; /* Push content when the sidebar is expanded */
+            }
+
+    </style>
+</head>
+<body>
+    <!-- Toggle button -->
+    <button id="toggle-sidebar-btn" class="btn btn-dark">☰</button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        @if (Context.User.Identity.IsAuthenticated)
+        {
+            <a href="@Url.Action("EditProfile", "Account")">Edit Profile</a>
+            <a href="@Url.Action("TransactionHistory", "Payment")">Transaction History</a>
+            <a href="@Url.Action("PurchasedVideos", "Account")">Your Purchased Videos</a>
+            <a href="@Url.Action("GetReviews", "Payment")">Review</a>
+            <a href="@Url.Action("QnA", "ChapterContent")">QnA</a>
+            <a href="@Url.Action("ContactUs", "Account")">Contact Us</a>
+            <a href="@Url.Action("Logout", "Account")">Logout</a>
+        }
+        else
+        {
+            <a href="@Url.Action("Login", "Account")">Login</a>
+            <a href="@Url.Action("Registration", "Account")">Register</a>
+        }
+    </div>
+
+    <!-- Bootstrap and JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Toggle sidebar open/close
+        const sidebar = document.getElementById("sidebar");
+        const toggleBtn = document.getElementById("toggle-sidebar-btn");
+
+        toggleBtn.addEventListener("click", function() {
+            sidebar.classList.toggle("open");
+        });
+    </script>
+</body>
+</html>

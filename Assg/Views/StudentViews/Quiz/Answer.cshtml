@@ -1,0 +1,45 @@
+﻿@model Assg.Models.StudentModels.QuizQuestion
+
+<h2>Quiz</h2>
+
+<form method="post" asp-action="SubmitAnswers">
+   <label>Your Name:</label> 
+    <input type="text" name="name" id="name" class="form-control" required/>
+
+    @foreach (var quiz in Model.questions)
+    {
+        <div class="question">
+            <h4>@quiz.Question</h4>
+
+            <input type="hidden" name="quizId" value="@Model.Id" />
+
+            @if (!string.IsNullOrEmpty(quiz.FileName) && quiz.FileType.StartsWith("image/"))
+            {
+                <div>
+                    <img src="@Url.Action("GetQuizImage", "Quiz", new { id = quiz.Id })" alt="Quiz Image" style="max-width: 100%; height: auto;" />
+                </div>
+            }
+            else if (!string.IsNullOrEmpty(quiz.FileName))
+            {
+                <p>
+                    <a href="@Url.Action("DownloadFile", "Quiz", new { id = quiz.Id })" class="btn btn-sm btn-primary">
+                        Download @quiz.FileName
+                    </a>
+                </p>
+            }
+
+            <label>Options:</label>
+            @foreach (var option in quiz.Options)
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="answers[@quiz.Id].MultipleChoiceAnswer" value="@option" id="@option@quiz.Id" />
+                    <label class="form-check-label" for="@option@quiz.Id">
+                        @option
+                    </label>
+                </div>
+            }
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Submit Answers</button>
+</form>

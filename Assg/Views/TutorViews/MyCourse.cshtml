@@ -1,0 +1,316 @@
+﻿@model Assg.Models.TutorModels.CourseDetailsViewModel
+@using Microsoft.AspNetCore.Identity
+
+
+
+<div class="course-overview">
+    <h2>Course overview</h2>
+    <div class="header">
+        <input type="text" id="searchInput" placeholder="Search" />
+        <button class="add-course" id="openModalBtn">+ Add course</button>
+    </div>
+
+    <div class="course-list">
+        @foreach (var course in Model.Courses)
+        {
+            <a href="@Url.Action("Details", "Course", new { id = course.Id })" class="course-card" data-name="@course.Name" data-subtitle="@course.subtitle" style="text-decoration: none;">
+                <h3>@course.Id </h3>
+                <h3>@course.Name</h3>
+                <p style="text-decoration: none;">Student Enrolled - @course.Participant</p>
+            </a>
+
+        }
+    </div>
+
+    <div id="addCourseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+            <h2>Add New Course</h2>
+            <form id="addCourseForm" method="post" action="@Url.Action("AddCourse")">
+                <div class="form-group">
+                    <label for="courseName">Course Name:</label>
+                    <input type="text" id="courseName" name="name" required />
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="categoryId">Category:</label>
+                    <select id="categoryId" name="categoryId" required>
+                        <option value="" disabled selected>Select a category</option>
+                        @if (ViewBag.Categories != null)
+                        {
+                            foreach (var category in ViewBag.Categories)
+                            {
+                                <option value="@category.categoryId">@category.categoryName</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="" disabled>No categories available</option>
+                        }
+                    </select>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="subcategoryName">Subcategory:</label>
+                    <select id="subcategoryName" name="SubcategoryName" required disabled>
+                        <option value="">Select a subcategory</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="courseSubtitle">Subtitle:</label>
+                    <input type="text" id="courseSubtitle" name="subtitle" required />
+                </div>
+                <div class="form-group">
+                    <label for="price">Price (MYR):</label>
+                    <input type="number" id="price" name="price" step="0.01" min="0.01" required />
+                </div>
+                <div class="form-group">
+                    <label for="courseDescription">Description:</label>
+                    <textarea id="courseDescription" name="description" required></textarea>
+                </div>
+                <div>
+                    <button type="submit" class="submit-btn">Add Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var modal = document.getElementById("addCourseModal");
+    var openModalBtn = document.getElementById("openModalBtn");
+    var closeModalBtn = document.getElementById("closeModalBtn");
+
+    openModalBtn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    closeModalBtn.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    document.getElementById('searchInput').addEventListener('input', function () {
+        var searchTerm = this.value;
+
+        fetch('/Course/SearchCourses?searchTerm=' + encodeURIComponent(searchTerm), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                var courseList = document.querySelector('.course-list');
+                courseList.innerHTML = '';
+
+                data.forEach(course => {
+                    var courseCard = document.createElement('a');
+                    courseCard.className = 'course-card';
+                    courseCard.href = `/Course/Details/${course.Id}`;
+                    courseCard.setAttribute('data-name', course.Name);
+                    courseCard.setAttribute('data-subtitle', course.Subtitle);
+
+                    courseCard.innerHTML = `
+                        <h3>${course.Id} ${course.Name}</h3>
+                        <p>${course.Subtitle}</p>
+                    `;
+
+                    courseList.appendChild(courseCard);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const categorySelect = document.getElementById('categoryId');
+        const subcategorySelect = document.getElementById('subcategoryName');
+
+        categorySelect.addEventListener('change', function() {
+            const selectedCategoryId = this.value;
+
+            subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
+            subcategorySelect.disabled = true;
+
+            if (selectedCategoryId) {
+                fetch(`/MyCourse/GetSubcategories?categoryId=${selectedCategoryId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.length > 0) {
+                            subcategorySelect.disabled = false;
+                            data.forEach(item => {
+                                const option = document.createElement('option');
+                                option.value = item.subcategoryName;
+                                option.textContent = item.subcategoryName;
+                                subcategorySelect.appendChild(option);
+                            });
+                        } else {
+                            subcategorySelect.innerHTML = '<option value="">No subcategories available</option>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        subcategorySelect.innerHTML = '<option value="">Error loading subcategories</option>';
+                    });
+            }
+        });
+    });
+</script>
+
+
+<script>
+    document.getElementById('searchInput').addEventListener('input', function () {
+        var searchTerm = this.value.toLowerCase();
+        var courses = document.querySelectorAll('.course-card');
+
+        courses.forEach(function (course) {
+            var courseName = course.getAttribute('data-name').toLowerCase();
+            var courseSubtitle = course.getAttribute('data-subtitle').toLowerCase();
+
+            if (courseName.includes(searchTerm) || courseSubtitle.includes(searchTerm)) {
+                course.style.display = 'block';
+            } else {
+                course.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<style>
+    .course-overview {
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 50%;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .add-course {
+        padding: 8px 16px;
+        background-color: white;
+        color: black;
+        border: 2px solid #B0B0B0;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .add-course:hover {
+            background-color: #B0B0B0;
+        }
+
+    .course-list {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .course-card {
+        padding: 16px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        width: 200px;
+        background-color: white;
+    }
+
+        .course-card h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .course-card p {
+            margin: 8px 0 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 5px;
+        width: 500px;
+    }
+
+    .close-btn {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        float: right;
+        cursor: pointer;
+    }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .submit-btn {
+        padding: 10px 20px;
+        background-color: #3164F4;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        width: 100%;
+        opacity: 0.3;
+    }
+
+        .submit-btn:hover {
+            background-color: #255BB2;
+            opacity: 1;
+        }
+
+    input, textarea {
+        width: 48%;
+        padding: 8px;
+        margin: 8px 1%;
+        border: 1px solid lightgray;
+        border-radius: 4px;
+        background-color: #f7f7f7;
+    }
+
+    textarea {
+        width: 100%;
+        height: 100px;
+    }
+
+        input:focus, textarea:focus {
+            border-color: #3164F4;
+            opacity: 0.3;
+        }
+</style>
