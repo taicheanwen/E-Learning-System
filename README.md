@@ -59,3 +59,19 @@ To get the project running, you'll need Visual Studio 2022.
     * Import the `tennisclub.sql` file provided in the repository to set up the database schema and initial data.
 4.  **Run the Application:**
     Build and run the project from Visual Studio.
+
+### Public & Admin Access
+
+After running the project, the homepage for the public will be displayed. To access the Admin Login Page, you need to add `/Admin/AdminLogin` to the end of the URL.
+
+* **Admin Account:**
+    * Username: `admin`
+    * Password: `123123`
+
+* **Student Account:**
+    * Username: `test`
+    * Password: `12345678`
+
+* **Tutor Account:**
+    * Username: `tutor1`
+    * Password: `12345678`
