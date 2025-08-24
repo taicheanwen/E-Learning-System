@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\USER\\source\\repos\\Assg\\Assg.csproj": {}
+    "C:\\Users\\USER\\Documents\\RIS\\RIS Sem 2\\BMIT2023 Web System\\Assg\\Assg.csproj": {}
   },
   "projects": {
-    "C:\\Users\\USER\\source\\repos\\Assg\\Assg.csproj": {
+    "C:\\Users\\USER\\Documents\\RIS\\RIS Sem 2\\BMIT2023 Web System\\Assg\\Assg.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USER\\source\\repos\\Assg\\Assg.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Documents\\RIS\\RIS Sem 2\\BMIT2023 Web System\\Assg\\Assg.csproj",
         "projectName": "Assg",
-        "projectPath": "C:\\Users\\USER\\source\\repos\\Assg\\Assg.csproj",
+        "projectPath": "C:\\Users\\USER\\Documents\\RIS\\RIS Sem 2\\BMIT2023 Web System\\Assg\\Assg.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\USER\\source\\repos\\Assg\\obj\\",
+        "outputPath": "C:\\Users\\USER\\Documents\\RIS\\RIS Sem 2\\BMIT2023 Web System\\Assg\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
